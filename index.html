@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Homepage</title>
-<script>
-    var mt = window.mt || function(){ (mt.q = mt.q || []).push(arguments); };
-</script>
+    <title>Restaurant Association | Home</title>
+    <script>
+        (function(w,d,t,u,n,a,m){w['MauticTrackingObject']=n;
+            w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),
+            m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://d2.altametrics.com/mtc.js','mt');
+
+        // This sends the anonymous visit hit to Mautic
+        mt('send', 'pageview');
+    </script>
 </head>
 <body>
- 
-<h1>Homepage</h1>
-<a href="news.html">News</a><br>
-<a href="jobs.html">Jobs</a><br>
-<a href="signup.html">Signup</a>
- 
-<script>
-  mt('send', 'pageview');
- 
-  mt('send', 'event', {
-    category: 'Homepage',
-    action: 'Visited'
-  });
-</script>
- 
+    <h1>Restaurant Association Homepage</h1>
+    <p>Tracking anonymous visitor interest...</p>
+    <nav>
+        <a href="news.html">News</a> | 
+        <a href="jobs.html">Jobs</a> | 
+        <a href="signup.html">Sign Up Free</a>
+    </nav>
 </body>
 </html>
