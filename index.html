@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Homepage</title>
+<script>
+    var mt = window.mt || function(){ (mt.q = mt.q || []).push(arguments); };
+</script>
+</head>
+<body>
+ 
+<h1>Homepage</h1>
+<a href="news.html">News</a><br>
+<a href="jobs.html">Jobs</a><br>
+<a href="signup.html">Signup</a>
+ 
+<script>
+  mt('send', 'pageview');
+ 
+  mt('send', 'event', {
+    category: 'Homepage',
+    action: 'Visited'
+  });
+</script>
+ 
+</body>
+</html>
