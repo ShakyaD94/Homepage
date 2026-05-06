@@ -13,12 +13,15 @@
     a.async=1;
     a.src=u;
     a.onload = function() {
-        // Fire event AFTER script is loaded
+        alert('adsadasdas');
         mt('send', 'event', {
             category: 'Content',
             action:   'Article Read',
             name:     'Labor Cost Trends 2025'
         });
+		MauticJS.sendPageview(['send', 'pageview', {email: 'thisistest@example.com', field2: 'val'}]);
+
+
     };
     m.parentNode.insertBefore(a,m);
 })(window,document,'script','https://d2.altametrics.com/mtc.js','mt');
