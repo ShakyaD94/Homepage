@@ -4,22 +4,25 @@
     <title>GitLab to Mautic Event Tracker</title>
 
     <!-- 1. Mautic Tracking Script (Standard) -->
-    <script>
-        (function(w,d,t,u,n,a,m){w['MauticTrackingObject']=n;
-            w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),
-            m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://d2.altametrics.com/mtc.js','mt');
-
-        /* 
-           2. Your Specific Event 
-           This fires automatically when the page loads.
-        */
+    <<script>
+(function(w,d,t,u,n,a,m){
+    w['MauticTrackingObject']=n;
+    w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)};
+    a=d.createElement(t),
+    m=d.getElementsByTagName(t)[0];
+    a.async=1;
+    a.src=u;
+    a.onload = function() {
+        // Fire event AFTER script is loaded
         mt('send', 'event', {
             category: 'Content',
             action:   'Article Read',
             name:     'Labor Cost Trends 2025'
         });
-    </script>
+    };
+    m.parentNode.insertBefore(a,m);
+})(window,document,'script','https://d2.altametrics.com/mtc.js','mt');
+</script>
 </head>
 <body>
     <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
