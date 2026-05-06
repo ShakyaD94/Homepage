@@ -1,36 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>GitLab to Mautic Event Tracker</title>
+    <title>Mautic Event Tracker</title>
 
-    <!-- 1. Mautic Tracking Script (Standard) -->
-    <<script>
-(function(w,d,t,u,n,a,m){
-    w['MauticTrackingObject']=n;
-    w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)};
-    a=d.createElement(t),
-    m=d.getElementsByTagName(t)[0];
-    a.async=1;
-    a.src=u;
-    a.onload = function() {
-        alert('adsadasdas');
+    <script>
+    (function(w,d,t,u,n,a,m){
+        w['MauticTrackingObject']=n;
+
+        w[n]=w[n]||function(){
+            (w[n].q=w[n].q||[]).push(arguments)
+        };
+
+        a=d.createElement(t),
+        m=d.getElementsByTagName(t)[0];
+
+        a.async=1;
+        a.src=u;
+
+        m.parentNode.insertBefore(a,m);
+
+    })(window,document,'script','https://d2.restaurantassociation.com/mtc.js','mt');
+
+
+    // Wait until page fully loads
+    window.addEventListener('load', function () {
+
+        console.log('Mautic Loaded');
+
+        // Pageview
+        mt('send', 'pageview', {
+            email: 'thisistest@example.com'
+        });
+
+        // Custom Event
         mt('send', 'event', {
             category: 'Content',
-            action:   'Article Read',
-            name:     'Labor Cost Trends 2025'
+            action: 'Article Read',
+            name: 'Labor Cost Trends 2025'
         });
-		MauticJS.sendPageview(['send', 'pageview', {email: 'thisistest@example.com', field2: 'val'}]);
 
+    });
+    </script>
 
-    };
-    m.parentNode.insertBefore(a,m);
-})(window,document,'script','https://d2.restaurantassociation.com/mtc.js','mt');
-</script>
 </head>
+
 <body>
-    <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
-        <h2>Event Sent!</h2>
-        <p>The "Article Read" event for <strong>Labor Cost Trends 2025</strong> has been dispatched to Mautic.</p>
-    </div>
+
+<h2>Mautic Event Test</h2>
+
 </body>
 </html>
