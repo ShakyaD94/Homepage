@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GitLab to Mautic Event Tracker</title>
+
+    <!-- 1. Mautic Tracking Script (Standard) -->
+    <script>
+        (function(w,d,t,u,n,a,m){w['MauticTrackingObject']=n;
+            w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),
+            m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://your-mautic-url.com/mtc.js','mt');
+
+        /* 
+           2. Your Specific Event 
+           This fires automatically when the page loads.
+        */
+        mt('send', 'event', {
+            category: 'Content',
+            action:   'Article Read',
+            name:     'Labor Cost Trends 2025'
+        });
+    </script>
+</head>
+<body>
+    <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
+        <h2>Event Sent!</h2>
+        <p>The "Article Read" event for <strong>Labor Cost Trends 2025</strong> has been dispatched to Mautic.</p>
+    </div>
+</body>
+</html>
