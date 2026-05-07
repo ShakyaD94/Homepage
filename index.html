@@ -3,20 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MauticJS Debug Demo - Final</title>
+    <title>Restaurant Insights Portal | CRM Debugger</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        button { padding: 10px 20px; margin: 10px; background: #007cba; color: white; border: none; cursor: pointer; border-radius: 4px; }
-        button:hover { background: #005a87; }
-        #log { background: #f5f5f5; padding: 15px; margin-top: 20px; height: 300px; overflow-y: scroll; border: 1px solid #ddd; font-family: monospace; font-size: 14px; white-space: pre-wrap; }
-        .success { color: green; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: #f8f9fa; color: #212529; }
+        header { background: #004a7c; color: white; padding: 30px 20px; text-align: center; border-bottom: 4px solid #007cba; }
+        .container { max-width: 700px; margin: 50px auto; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; }
+        h2 { color: #333; margin-bottom: 10px; }
+        .article-title { font-size: 20px; color: #007cba; font-weight: bold; margin-bottom: 25px; display: block; }
+        button { 
+            background-color: #007cba; color: white; border: none; padding: 16px 32px; 
+            font-size: 16px; font-weight: 600; border-radius: 5px; cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: 0.2s;
+        }
+        button:hover { background-color: #005a87; transform: translateY(-1px); }
+        #console { 
+            margin-top: 30px; background: #1e1e1e; color: #00ff00; padding: 15px; 
+            border-radius: 5px; font-family: 'Courier New', monospace; font-size: 12px; 
+            text-align: left; height: 120px; overflow-y: auto;
+        }
     </style>
 </head>
 <body>
-    <h1>MauticJS Tracking Debug</h1>
-    <p>Check your Mautic timeline. Click the buttons to send data.</p>
+
+    <header>
+        <h1>Field Sales CRM Tracking</h1>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>Track Content Engagement</h2>
+            <span class="article-title">Labor Cost Trends 2025</span>
+            
+            <button onclick="trackArticleEvent('Labor Cost Trends 2025')">
+                Simulate "Article Read" Event
+            </button>
+        </div>
+
+        <div id="console">System Ready... Waiting for interaction.</div>
+    </div>
 
     <script>
+        // --- 1. Mautic Base Tracking ---
         (function(w,d,t,u,n,a,m){
             w['MauticTrackingObject']=n;
             w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},
@@ -24,56 +52,48 @@
             m=d.getElementsByTagName(t)[0];
             a.async=1; a.src=u; m.parentNode.insertBefore(a,m)
         })(window,document,'script','https://d2.altametrics.com/mtc.js','mt');
-    </script>
 
-    <button onclick="trackPageview()">1. Track Pageview</button>
-    <button onclick="trackCustomEvent('Button Clicked', {productId: 123})">2. Button Click Event</button>
-    <button onclick="trackCustomEvent('Purchase Made', {amount: 99.99})">3. Purchase Event</button>
-
-    <h2>Debug Log</h2>
-    <div id="log"></div>
-
-    <script>
-        const logDiv = document.getElementById('log');
-        function log(message, className = '') {
-            const time = new Date().toLocaleTimeString();
-            const entry = document.createElement('div');
-            entry.className = className;
-            entry.textContent = `[${time}] ${message}`;
-            logDiv.appendChild(entry);
-            logDiv.scrollTop = logDiv.scrollHeight;
+        function printLog(msg) {
+            const div = document.getElementById('console');
+            div.innerHTML += `> ${new Date().toLocaleTimeString()}: ${msg}<br>`;
+            div.scrollTop = div.scrollHeight;
         }
 
-        function trackPageview() {
-            mt('send', 'pageview');
-            log('→ Standard Pageview sent');
-        }
-
-        // ONE function to handle everything correctly
-        function trackCustomEvent(eventName, data) {
-            const uniqueID = Date.now();
+        /**
+         * --- 2. The Final "Force-Row" Tracking Logic ---
+         * This uses the URL strategy that worked in your image_b28c76.png test.
+         */
+        function trackArticleEvent(title) {
+            const category = 'Content';
+            const action = 'Article Read';
             
-            // 1. SET data for the Mautic Contact Fields (for segments)
-            for (let key in data) {
-                mt('set', key, data[key]);
-            }
+            printLog(`Preparing data for: ${title}`);
 
-            // 2. Build the visible URL query string
-            const dataParams = Object.entries(data).map(([k, v]) => `${k}=${v}`).join('&');
-
-            // 3. SEND the event
-            mt('send', 'pageview', {
-                'mt_event': eventName,
-                'page_title': eventName, 
-                // This makes the data appear in your screenshot's "Page URL" line
-                'page_url': window.location.origin + window.location.pathname + '?' + dataParams + '&t=' + uniqueID
+            // A. Send formal event for Reports
+            mt('send', 'event', {
+                category: category,
+                action: action,
+                name: title
             });
 
-            log(`→ Sent "${eventName}" with ${dataParams}`, 'success');
+            // B. Construct a URL that FORCES Mautic to create Timeline Rows
+            // This mirrors how "ProductId" and "Category" worked in your hardware test.
+            const currentPath = window.location.origin + window.location.pathname;
+            const forcedDataUrl = `${currentPath}?article=${encodeURIComponent(title)}&category=${category}&action=${encodeURIComponent(action)}&t=${Date.now()}`;
+
+            // C. Send the UI Hit
+            mt('send', 'pageview', {
+                'mt_event': title,       // Sets the Bold Header in Timeline
+                'page_title': title,     // Backup Title
+                'page_url': forcedDataUrl // Forces Category & Action to appear as rows
+            });
+
+            printLog(`✅ Data pushed. Refresh Mautic Timeline.`);
         }
 
-        document.addEventListener('mauticPageEventDelivered', function(e) {
-            log('✅ Mautic Confirmed Receipt', 'success');
+        // Confirmation Listener
+        document.addEventListener('mauticPageEventDelivered', function() {
+            printLog('Mautic Server: Receipt Confirmed.');
         });
     </script>
 </body>
