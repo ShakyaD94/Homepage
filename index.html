@@ -1,53 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>GitLab to Mautic Event Tracker dshakya</title>
-
-    <!-- 1. Mautic Tracking Script (Standard) -->
-    <<script>
-(function(w,d,t,u,n,a,m){
-    w['MauticTrackingObject']=n;
- 
-    w[n]=w[n]||function(){
-        (w[n].q=w[n].q||[]).push(arguments)
-    };
- 
-    a=d.createElement(t);
-    m=d.getElementsByTagName(t)[0];
- 
-    a.async=1;
-    a.src=u;
- 
-    a.onload = function() {
- 
-        console.log('Mautic Loaded');
- 
-        // REQUIRED FIRST PAGEVIEW
-        mt('send', 'pageview');
- 
-        // TEST CUSTOM EVENT AS VIRTUAL PAGE
-        setTimeout(function() {
- 
-            mt('send', 'pageview', {
-                url: window.location.origin + '/event/add-to-cart',
-                title: 'Add To Cart'
-            });
- 
-            console.log('Custom pageview sent');
- 
-        }, 2000);
- 
-    };
- 
-    m.parentNode.insertBefore(a,m);
- 
-})(window,document,'script','https://d2.altametrics.com/mtc.js','mt');
-</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MauticJS Debug Demo - Final</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        button { padding: 10px 20px; margin: 10px; background: #007cba; color: white; border: none; cursor: pointer; border-radius: 4px; }
+        button:hover { background: #005a87; }
+        #log { background: #f5f5f5; padding: 15px; margin-top: 20px; height: 300px; overflow-y: scroll; border: 1px solid #ddd; font-family: monospace; font-size: 14px; white-space: pre-wrap; }
+        .success { color: green; }
+    </style>
 </head>
 <body>
-    <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
-        <h2>Event Sent!</h2>
-        <p>The "Article Read" event for <strong>Labor Cost Trends 2025</strong> has been dispatched to Mautic.</p>
-    </div>
+    <h1>MauticJS Tracking Debug</h1>
+    <p>Check your Mautic timeline. Click the buttons to send data.</p>
+
+    <script>
+        (function(w,d,t,u,n,a,m){
+            w['MauticTrackingObject']=n;
+            w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},
+            a=d.createElement(t),
+            m=d.getElementsByTagName(t)[0];
+            a.async=1; a.src=u; m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://d2.altametrics.com/mtc.js','mt');
+    </script>
+
+    <button onclick="trackPageview()">1. Track Pageview</button>
+    <button onclick="trackCustomEvent('Button Clicked', {productId: 123})">2. Button Click Event</button>
+    <button onclick="trackCustomEvent('Purchase Made', {amount: 99.99})">3. Purchase Event</button>
+
+    <h2>Debug Log</h2>
+    <div id="log"></div>
+
+    <script>
+        const logDiv = document.getElementById('log');
+        function log(message, className = '') {
+            const time = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = className;
+            entry.textContent = `[${time}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function trackPageview() {
+            mt('send', 'pageview');
+            log('→ Standard Pageview sent');
+        }
+
+        // ONE function to handle everything correctly
+        function trackCustomEvent(eventName, data) {
+            const uniqueID = Date.now();
+            
+            // 1. SET data for the Mautic Contact Fields (for segments)
+            for (let key in data) {
+                mt('set', key, data[key]);
+            }
+
+            // 2. Build the visible URL query string
+            const dataParams = Object.entries(data).map(([k, v]) => `${k}=${v}`).join('&');
+
+            // 3. SEND the event
+            mt('send', 'pageview', {
+                'mt_event': eventName,
+                'page_title': eventName, 
+                // This makes the data appear in your screenshot's "Page URL" line
+                'page_url': window.location.origin + window.location.pathname + '?' + dataParams + '&t=' + uniqueID
+            });
+
+            log(`→ Sent "${eventName}" with ${dataParams}`, 'success');
+        }
+
+        document.addEventListener('mauticPageEventDelivered', function(e) {
+            log('✅ Mautic Confirmed Receipt', 'success');
+        });
+    </script>
 </body>
 </html>
