@@ -10,31 +10,30 @@
             m=d.getElementsByTagName(t)[0];
             a.async=1;
             a.src=u;
-            
-            // Wait for script to load before sending complex events
-            a.onload = function() {
-                // 1. Send the Pageview with User Identification
-                mt('send', 'pageview', {
-                    email: 'thisistest@example.com',
-                    field2: 'val'
-                });
-
-                // 2. Send the Custom Event (This will now have data)
-                mt('send', 'event', {
-                    category: 'Content',
-                    action:   'Article Read',
-                    label:    'Labor Cost Trends 2025' // Use 'label' instead of 'name' for standard event tracking
-                });
-            };
-            
             m.parentNode.insertBefore(a,m);
         })(window,document,'script','https://d2.altametrics.com/mtc.js','mt');
+
+        // 1. Identify the user first
+        mt('send', 'pageview', {
+            email: 'thisistest@example.com',
+            firstname: 'Test'
+        });
+
+        // 2. Send the event after a tiny delay to ensure the session is set
+        setTimeout(function() {
+            mt('send', 'event', {
+                category: 'Content',
+                action: 'Article Read',
+                label: 'Labor Cost Trends 2025' // 'label' is more reliable than 'name'
+            });
+            console.log('Event dispatched with Label');
+        }, 500); 
     </script>
 </head>
 <body>
     <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
-        <h2>Event Dispatched</h2>
-        <p>Sending tracking data for <strong>Labor Cost Trends 2025</strong> to Mautic...</p>
+        <h2>Event Sent!</h2>
+        <p>Checking Mautic for <strong>Labor Cost Trends 2025</strong>...</p>
     </div>
 </body>
 </html>
