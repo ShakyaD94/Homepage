@@ -1,39 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Restaurant Association Tracker</title>
-    <script>
-        (function(w,d,t,u,n,a,m){
-            w['MauticTrackingObject']=n;
-            w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)};
-            a=d.createElement(t),
-            m=d.getElementsByTagName(t)[0];
-            a.async=1;
-            a.src=u;
-            m.parentNode.insertBefore(a,m);
-        })(window,document,'script','https://d2.altametrics.com/mtc.js','mt');
+    <title>GitLab to Mautic Event Tracker</title>
 
-        // 1. Identify the user first
-        mt('send', 'pageview', {
-            email: 'thisistest@example.com',
-            firstname: 'Test'
+    <!-- 1. Mautic Tracking Script (Standard) -->
+    <<script>
+(function(w,d,t,u,n,a,m){
+    w['MauticTrackingObject']=n;
+    w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)};
+    a=d.createElement(t),
+    m=d.getElementsByTagName(t)[0];
+    a.async=1;
+    a.src=u;
+    a.onload = function() {
+        alert('adsadasdas');
+        mt('send', 'event', {
+            category: 'Content',
+            action:   'Article Read',
+            name:     'Labor Cost Trends 2025'
         });
+		MauticJS.sendPageview(['send', 'pageview', {email: 'thisistest@example.com', field2: 'val'}]);
 
-        // 2. Send the event after a tiny delay to ensure the session is set
-        setTimeout(function() {
-            mt('send', 'event', {
-                category: 'Content',
-                action: 'Article Read',
-                label: 'Labor Cost Trends 2025' // 'label' is more reliable than 'name'
-            });
-            console.log('Event dispatched with Label');
-        }, 500); 
-    </script>
+
+    };
+    m.parentNode.insertBefore(a,m);
+})(window,document,'script','https://d2.altametrics.com/mtc.js','mt');
+</script>
 </head>
 <body>
     <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
         <h2>Event Sent!</h2>
-        <p>Checking Mautic for <strong>Labor Cost Trends 2025</strong>...</p>
+        <p>The "Article Read" event for <strong>Labor Cost Trends 2025</strong> has been dispatched to Mautic.</p>
     </div>
 </body>
 </html>
