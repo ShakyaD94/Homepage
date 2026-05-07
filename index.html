@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>GitLab to Mautic Event Tracker</title>
+    <title>GitLab to Mautic Event Tracker abc deepanshu</title>
 
     <!-- 1. Mautic Tracking Script (Standard) -->
-    <script>
+    <<script>
 (function(w,d,t,u,n,a,m){
+ 
     w['MauticTrackingObject']=n;
-    w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)};
-    a=d.createElement(t),
+ 
+    w[n]=w[n]||function(){
+        (w[n].q=w[n].q||[]).push(arguments)
+    };
+ 
+    a=d.createElement(t);
     m=d.getElementsByTagName(t)[0];
+ 
     a.async=1;
     a.src=u;
+ 
     a.onload = function() {
-        alert('adsadasdas');
-        mt('send', 'event', {
-            category: 'Content',
-            action:   'Article Read',
-            name:     'Labor Cost Trends 2025'
-        });
-		MauticJS.sendPageview(['send', 'pageview', {email: 'thisistest@example.com', field2: 'val'}]);
-
-
+ 
+        console.log('Mautic Loaded');
+ 
+       mt('send', 'pageview', {
+    url: window.location.origin + '/event/add-to-cart/sku-123',
+    title: 'Product Added - iPhone 16'
+});
+ 
     };
+ 
     m.parentNode.insertBefore(a,m);
+ 
 })(window,document,'script','https://d2.altametrics.com/mtc.js','mt');
 </script>
 </head>
